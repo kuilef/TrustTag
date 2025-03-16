@@ -1,8 +1,6 @@
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', () => {
   // Get references to form elements
-  const airtableUrlInput = document.getElementById('airtableUrl');
-  const airtableApiKeyInput = document.getElementById('airtableApiKey');
   const syncIntervalSelect = document.getElementById('syncInterval');
   const saveButton = document.getElementById('saveButton');
   const statusDiv = document.getElementById('status');
@@ -26,16 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Function to load settings from storage
   function loadSettings() {
-    chrome.storage.sync.get(['airtableUrl', 'airtableApiKey', 'syncInterval'], (result) => {
+    chrome.storage.sync.get(['syncInterval'], (result) => {
       console.log('Loading settings from storage:', result);
-      
-      if (result.airtableUrl) {
-        airtableUrlInput.value = result.airtableUrl;
-      }
-      
-      if (result.airtableApiKey) {
-        airtableApiKeyInput.value = result.airtableApiKey;
-      }
       
       if (result.syncInterval) {
         syncIntervalSelect.value = result.syncInterval.toString();
@@ -44,16 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // Also check with background script for current values
       chrome.runtime.sendMessage({ action: 'getConfig' }, (response) => {
         console.log('Current config from background:', response);
-        if (response) {
-          if (response.airtableUrl && !airtableUrlInput.value) {
-            airtableUrlInput.value = response.airtableUrl;
-          }
-          if (response.airtableApiKey && !airtableApiKeyInput.value) {
-            airtableApiKeyInput.value = response.airtableApiKey;
-          }
-          if (response.syncInterval && !syncIntervalSelect.value) {
-            syncIntervalSelect.value = response.syncInterval.toString();
-          }
+        if (response && response.syncInterval && !syncIntervalSelect.value) {
+          syncIntervalSelect.value = response.syncInterval.toString();
         }
       });
     });
@@ -123,41 +105,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to save settings to storage
   function saveSettings() {
     // Get values from form
-    const airtableUrl = airtableUrlInput.value.trim();
-    const airtableApiKey = airtableApiKeyInput.value.trim();
     const syncInterval = parseInt(syncIntervalSelect.value, 10);
     
-    console.log('Saving settings:', { 
-      airtableUrl, 
-      airtableApiKey: airtableApiKey ? '[REDACTED]' : '', 
-      syncInterval 
-    });
-    
-    // Validate API key (required)
-    if (!airtableApiKey) {
-      showStatus('Please enter your Airtable API key', 'error');
-      airtableApiKeyInput.focus();
-      return;
-    }
-    
-    // Validate Airtable URL or Base ID
-    if (!airtableUrl) {
-      showStatus('Please enter an Airtable Base ID or URL', 'error');
-      airtableUrlInput.focus();
-      return;
-    }
-    
-    // Basic validation - either a Base ID or a valid URL
-    if (!isValidAirtableInput(airtableUrl)) {
-      showStatus('Please enter a valid Airtable Base ID or URL', 'error');
-      airtableUrlInput.focus();
-      return;
-    }
+    console.log('Saving settings:', { syncInterval });
     
     // Save settings to storage
     chrome.storage.sync.set({
-      airtableUrl,
-      airtableApiKey,
       syncInterval
     }, () => {
       // Show success message
@@ -166,17 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // Trigger data sync in background script
       syncNow();
     });
-  }
-  
-  // Function to validate Airtable input format
-  function isValidAirtableInput(input) {
-    // Check if it's a Base ID (starts with "app")
-    if (input.startsWith('app')) {
-      return true;
-    }
-    
-    // Or check if it's a valid Airtable URL
-    return input.startsWith('https://airtable.com/') && input.includes('/');
   }
   
   // Function to show status message

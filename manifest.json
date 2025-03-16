@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
   "name": "TrustTag",
-  "version": "1.0.0",
-  "description": "Displays warnings on websites based on data from Airtable",
+  "version": "1.1.0",
+  "description": "Displays warnings on websites with questionable content",
   "permissions": [
     "storage",
     "alarms"
   ],
   "host_permissions": [
-    "https://api.airtable.com/*"
+    "https://trusttag.kuilef42.workers.dev/"
   ],
   "background": {
     "service_worker": "background.js"

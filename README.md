@@ -1,13 +1,14 @@
 # TrustTag Chrome Extension
 
-TrustTag is a Chrome extension that displays warnings on websites based on data from Airtable. It helps users identify potentially misleading or problematic websites by showing warning banners with custom notes.
+TrustTag is a Chrome extension that displays warnings on websites with questionable content. It helps users identify potentially misleading or problematic websites by showing warning banners with custom notes.
 
 ## Features
 
-- Displays warning banners on websites that match entries in your Airtable database
+- Displays warning banners on websites that match entries in our central database
 - Supports wildcard matching for URLs (e.g., `wikipedia.org/*Israel*`)
-- Shows multiple notes for the same website
-- Configurable sync interval for Airtable data
+- Shows multiple warnings for the same website in a compact format
+- Configurable sync interval for database updates
+- Efficient caching using ETag for reduced bandwidth usage
 - Simple and clean user interface
 
 ## Installation
@@ -33,27 +34,25 @@ Alternatively, you can use the SVG code in `icon_reference.txt` to create the ic
 ## Configuration
 
 1. Click on the TrustTag icon in your Chrome toolbar to open the settings popup
-2. Enter your Airtable URL in the format: `https://airtable.com/appXXXXXXXXXXXXXX/tblXXXXXXXXXXXXXX`
-3. If your Airtable base is private, enter your Airtable API key
-4. Select your preferred sync interval
-5. Click "Save Settings"
+2. Select your preferred sync interval for database updates
+3. Click "Save Settings"
 
-## Airtable Setup
+## Warning Database
 
-Your Airtable base should have a table with the following columns:
+The extension connects to a central database that contains entries with the following information:
 
 - `address`: The website URL or pattern to match (e.g., `example.com` or `wikipedia.org/*Israel*`)
 - `short remark`: A brief warning message (e.g., "false information", "biased content")
 - `Note text`: A more detailed explanation of the warning
 - `Source`: A link to the source of the information or further reading
 
-For detailed instructions on setting up your Airtable base, see the included `airtable_setup.html` file.
+For more information about how the extension works, see the included `about.html` file.
 
 ## How It Works
 
-1. When you open a webpage, TrustTag checks if the URL matches any entries in your Airtable database
+1. When you open a webpage, TrustTag checks if the URL matches any entries in the warning database
 2. If there's a match, it displays a warning banner at the top of the page
-3. The banner shows the number of notes and a list of short remarks
+3. The banner shows the number of warnings and a list of short remarks
 4. Clicking on a remark shows the full note text and source
 5. You can close the banner using the × button
 
@@ -69,8 +68,9 @@ For detailed instructions on setting up your Airtable base, see the included `ai
 - `popup.js`: JavaScript for the settings popup
 - `images/`: Directory containing extension icons
 - `test.html`: Test page for verifying extension functionality
-- `airtable_setup.html`: Guide for setting up Airtable
+- `about.html`: Information about the extension
 - `package.bat`: Script for packaging the extension
+- `GIT_WORKFLOW.md`: Guide for using Git with this project
 
 ### Customization
 

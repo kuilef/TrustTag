@@ -166,21 +166,27 @@
     .form-group.required label {
       color: #c62828;
     }
+    
+    .info-box {
+      background-color: #e3f2fd;
+      border-left: 4px solid #2196F3;
+      padding: 12px;
+      margin-bottom: 16px;
+      border-radius: 4px;
+    }
+    
+    .info-box p {
+      margin: 0;
+      font-size: 14px;
+      color: #0d47a1;
+    }
   </style>
 </head>
 <body>
   <h1>TrustTag Settings</h1>
   
-  <div class="form-group">
-    <label for="airtableUrl">Airtable URL or Base ID</label>
-    <input type="text" id="airtableUrl" placeholder="https://airtable.com/appXXXX/tblYYYY or just appXXXX">
-    <div class="help-text">Enter the full Airtable URL with both Base ID and Table ID for best results</div>
-  </div>
-  
-  <div class="form-group required">
-    <label for="airtableApiKey">Airtable API Key <span class="required-mark">*</span></label>
-    <input type="password" id="airtableApiKey" placeholder="Enter your Airtable API key (starts with 'pat')">
-    <div class="help-text">Required for accessing Airtable data through the API</div>
+  <div class="info-box">
+    <p>TrustTag automatically fetches warning data from our central database.</p>
   </div>
   
   <div class="form-group">
@@ -214,7 +220,7 @@
   </div>
   
   <div class="footer">
-    TrustTag v1.0.0 - Displays warnings based on Airtable data
+    TrustTag v1.1.0 - Displays warnings for websites with questionable content
   </div>
   
   <script src="popup.js"></script>
