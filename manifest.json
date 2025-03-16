@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "TrustTag",
+  "version": "1.0.0",
+  "description": "Displays warnings on websites based on data from Airtable",
+  "permissions": [
+    "storage",
+    "alarms"
+  ],
+  "host_permissions": [
+    "https://api.airtable.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

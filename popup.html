@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrustTag Settings</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 16px;
+      width: 320px;
+      color: #333;
+    }
+    
+    h1 {
+      font-size: 18px;
+      margin: 0 0 16px 0;
+      color: #c62828;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: #c62828;
+      box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.2);
+    }
+    
+    .help-text {
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+    }
+    
+    button {
+      background-color: #c62828;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    
+    button:hover {
+      background-color: #b71c1c;
+    }
+    
+    .status {
+      margin-top: 16px;
+      padding: 8px;
+      border-radius: 4px;
+      font-size: 14px;
+      display: none;
+    }
+    
+    .status.success {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      display: block;
+    }
+    
+    .status.error {
+      background-color: #ffebee;
+      color: #c62828;
+      display: block;
+    }
+    
+    .footer {
+      margin-top: 16px;
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+    }
+    
+    .sync-status {
+      background-color: #f5f5f5;
+      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .sync-indicator {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    
+    .sync-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #999;
+      margin-right: 8px;
+      display: inline-block;
+    }
+    
+    .sync-dot.success {
+      background-color: #4CAF50;
+    }
+    
+    .sync-dot.error {
+      background-color: #F44336;
+    }
+    
+    .sync-dot.syncing {
+      background-color: #2196F3;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
+    
+    .last-sync-time, .sync-data-count {
+      font-size: 12px;
+      color: #666;
+      margin-top: 3px;
+    }
+    
+    .secondary-button {
+      background-color: #757575;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-top: 8px;
+      width: 100%;
+    }
+    
+    .secondary-button:hover {
+      background-color: #616161;
+    }
+    
+    .required-mark {
+      color: #c62828;
+      font-weight: bold;
+    }
+    
+    .form-group.required label {
+      color: #c62828;
+    }
+  </style>
+</head>
+<body>
+  <h1>TrustTag Settings</h1>
+  
+  <div class="form-group">
+    <label for="airtableUrl">Airtable URL or Base ID</label>
+    <input type="text" id="airtableUrl" placeholder="https://airtable.com/appXXXX/tblYYYY or just appXXXX">
+    <div class="help-text">Enter the full Airtable URL with both Base ID and Table ID for best results</div>
+  </div>
+  
+  <div class="form-group required">
+    <label for="airtableApiKey">Airtable API Key <span class="required-mark">*</span></label>
+    <input type="password" id="airtableApiKey" placeholder="Enter your Airtable API key (starts with 'pat')">
+    <div class="help-text">Required for accessing Airtable data through the API</div>
+  </div>
+  
+  <div class="form-group">
+    <label for="syncInterval">Sync Interval</label>
+    <select id="syncInterval">
+      <option value="15">Every 15 minutes</option>
+      <option value="30">Every 30 minutes</option>
+      <option value="60" selected>Every hour</option>
+      <option value="180">Every 3 hours</option>
+      <option value="360">Every 6 hours</option>
+      <option value="720">Every 12 hours</option>
+      <option value="1440">Every day</option>
+    </select>
+  </div>
+  
+  <button id="saveButton">Save Settings</button>
+  
+  <div id="status" class="status"></div>
+  
+  <div class="form-group">
+    <label>Sync Status</label>
+    <div id="syncStatus" class="sync-status">
+      <div class="sync-indicator">
+        <span class="sync-dot"></span>
+        <span id="syncStatusText">Unknown</span>
+      </div>
+      <div id="lastSyncTime" class="last-sync-time">Never synced</div>
+      <div id="syncDataCount" class="sync-data-count">No data</div>
+    </div>
+    <button id="syncNowButton" class="secondary-button">Sync Now</button>
+  </div>
+  
+  <div class="footer">
+    TrustTag v1.0.0 - Displays warnings based on Airtable data
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

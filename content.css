@@ -1,0 +1,129 @@
+/* TrustTag Banner Styles */
+.trusttag-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffebee;
+  color: #c62828;
+  z-index: 2147483647; /* Maximum z-index to ensure it's on top */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #ef9a9a;
+}
+
+.trusttag-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.trusttag-icon-container {
+  position: relative;
+  margin-right: 12px;
+}
+
+.trusttag-icon {
+  font-size: 20px;
+}
+
+.trusttag-counter {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #c62828;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.trusttag-text {
+  flex: 1;
+}
+
+.trusttag-title {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.trusttag-subtitle {
+  font-size: 12px;
+  margin-bottom: 8px;
+  color: #e53935;
+}
+
+.trusttag-remarks {
+  margin: 0;
+  padding: 0;
+  line-height: 1.4;
+}
+
+.trusttag-remark {
+  cursor: pointer;
+  display: inline;
+  padding: 0;
+}
+
+.trusttag-remark:hover {
+  text-decoration: underline;
+}
+
+.trusttag-close {
+  background: none;
+  border: none;
+  color: #c62828;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 0 0 16px;
+  margin: 0;
+  line-height: 1;
+}
+
+.trusttag-close:hover {
+  color: #b71c1c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .trusttag-banner {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  .trusttag-icon {
+    font-size: 16px;
+  }
+  
+  .trusttag-counter {
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    top: -6px;
+    right: -6px;
+  }
+  
+  .trusttag-icon-container {
+    margin-right: 8px;
+  }
+  
+  .trusttag-close {
+    font-size: 16px;
+    padding: 0 0 0 8px;
+  }
+  
+  .trusttag-subtitle {
+    font-size: 10px;
+  }
+}
