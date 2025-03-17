@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
   "name": "TrustTag",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Displays warnings on websites with questionable content",
   "permissions": [
     "storage",
     "alarms"
   ],
   "host_permissions": [
-    "https://trusttag.kuilef42.workers.dev/"
+    "<all_urls>"
   ],
   "background": {
     "service_worker": "background.js"

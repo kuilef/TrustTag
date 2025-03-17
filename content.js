@@ -84,12 +84,26 @@ function createWarningBanner(matchingEntries) {
   // Create array of remark elements
   const remarkElements = matchingEntries.map((entry, index) => {
     const remarkSpan = document.createElement('span');
-    remarkSpan.textContent = entry.shortRemark;
+    
+    // Add source name if available
+    if (entry.sourceName && entry.sourceName !== 'Default List') {
+      remarkSpan.textContent = `${entry.shortRemark} [${entry.sourceName}]`;
+    } else {
+      remarkSpan.textContent = entry.shortRemark;
+    }
+    
     remarkSpan.title = entry.noteText;
     remarkSpan.className = 'trusttag-remark';
     remarkSpan.addEventListener('click', () => {
       // Show full note text in a popup
-      alert(`${entry.noteText}\n\nSource: ${entry.source}`);
+      let message = `${entry.noteText}\n\nSource: ${entry.source}`;
+      
+      // Add data source info if available
+      if (entry.sourceName) {
+        message += `\nData source: ${entry.sourceName}`;
+      }
+      
+      alert(message);
     });
     return remarkSpan;
   });

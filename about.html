@@ -93,13 +93,14 @@
   <h1>TrustTag - About</h1>
   
   <div class="note">
-    <p>TrustTag is a Chrome extension that displays warnings on websites with questionable content based on a centralized database.</p>
+    <p>TrustTag is a Chrome extension that displays warnings on websites with questionable content based on data from multiple sources.</p>
   </div>
   
   <div class="section">
     <h2>How It Works</h2>
-    <p>TrustTag automatically checks each website you visit against our database of sites with questionable content. When a match is found, a warning banner is displayed at the top of the page.</p>
-    <p>The extension periodically syncs with our central database to ensure you have the most up-to-date information.</p>
+    <p>TrustTag automatically checks each website you visit against databases of sites with questionable content. When a match is found, a warning banner is displayed at the top of the page.</p>
+    <p>The extension periodically syncs with configured data sources to ensure you have the most up-to-date information.</p>
+    <p>Each warning shows which data source it came from, allowing you to understand the origin of the warning.</p>
   </div>
   
   <div class="section">
@@ -143,10 +144,23 @@
   </div>
   
   <div class="section">
+    <h2>Data Sources</h2>
+    <p>TrustTag supports multiple data sources for warnings:</p>
+    <ul>
+      <li>By default, it uses our central database at <code>https://trusttag.kuilef42.workers.dev/</code></li>
+      <li>You can add additional data sources by providing their URLs</li>
+      <li>Each data source can be enabled or disabled individually</li>
+      <li>Warnings from different sources are combined and displayed together</li>
+    </ul>
+    <p>Each data source should return JSON data in the same format as our central database.</p>
+  </div>
+  
+  <div class="section">
     <h2>Settings</h2>
     <p>You can configure the following settings by clicking on the TrustTag icon in your browser toolbar:</p>
     <ul>
-      <li><strong>Sync Interval:</strong> How often the extension checks for updates to the warning database</li>
+      <li><strong>Data Sources:</strong> Add, remove, or toggle data sources</li>
+      <li><strong>Sync Interval:</strong> How often the extension checks for updates to the warning databases</li>
     </ul>
     <p>You can also manually trigger a sync by clicking the "Sync Now" button in the popup.</p>
   </div>
