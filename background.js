@@ -9,7 +9,15 @@ const DEFAULT_SOURCE = {
 let dataSources = [DEFAULT_SOURCE];
 
 // Initialize extension
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener((details) => {
+  // Check if this is a fresh installation
+  if (details.reason === 'install') {
+    // Set first run flag
+    chrome.storage.local.set({ isFirstRun: true }, () => {
+      console.log('First run flag set');
+    });
+  }
+  
   // Load configuration from storage
   loadConfigAndSync();
   
@@ -19,23 +27,32 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // Function to load config and sync data
 function loadConfigAndSync() {
-  chrome.storage.sync.get(['syncInterval', 'dataSources'], (result) => {
-    console.log('Loaded configuration:', result);
+  chrome.storage.local.get(['isFirstRun'], (result) => {
+    const isFirstRun = result.isFirstRun;
     
-    if (result.syncInterval) syncInterval = result.syncInterval;
-    
-    if (result.dataSources && Array.isArray(result.dataSources) && result.dataSources.length > 0) {
-      dataSources = result.dataSources;
-      console.log('Loaded data sources:', dataSources);
-    } else {
-      // If no data sources are found, use the default
-      dataSources = [DEFAULT_SOURCE];
-      // Save the default data source
-      chrome.storage.sync.set({ dataSources });
-    }
-    
-    // Initial data sync
-    syncData();
+    chrome.storage.sync.get(['syncInterval', 'dataSources'], (result) => {
+      console.log('Loaded configuration:', result);
+      
+      if (result.syncInterval) syncInterval = result.syncInterval;
+      
+      if (result.dataSources && Array.isArray(result.dataSources) && result.dataSources.length > 0) {
+        dataSources = result.dataSources;
+        console.log('Loaded data sources:', dataSources);
+      } else {
+        // If no data sources are found, use the default
+        dataSources = [DEFAULT_SOURCE];
+        // Save the default data source
+        chrome.storage.sync.set({ dataSources });
+      }
+      
+      // Perform initial sync if this is first run
+      if (isFirstRun) {
+        console.log('First run detected, performing initial sync');
+        syncData();
+        // Clear first run flag
+        chrome.storage.local.remove('isFirstRun');
+      }
+    });
   });
 }
 
