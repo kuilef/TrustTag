@@ -22,16 +22,6 @@ Since this extension is not published to the Chrome Web Store, you'll need to in
 4. Click "Load unpacked" and select the directory containing the extension files
 5. The TrustTag extension should now appear in your extensions list
 
-## Setting Up Icons
-
-Before loading the extension, you need to create the icon files:
-
-1. Navigate to the `images` directory
-2. Open the HTML files (`icon16.html`, `icon48.html`, `icon128.html`) in a browser
-3. Take screenshots of each icon and save them as PNG files with the names `icon16.png`, `icon48.png`, and `icon128.png`
-
-Alternatively, you can use the SVG code in `icon_reference.txt` to create the icons using an SVG editor or online converter.
-
 ## Configuration
 
 1. Click on the TrustTag icon in your Chrome toolbar to open the settings popup
@@ -78,20 +68,10 @@ For more information about how the extension works, see the included `about.html
 - `images/`: Directory containing extension icons
 - `test.html`: Test page for verifying extension functionality
 - `about.html`: Information about the extension
-- `package.bat`: Script for packaging the extension
-- `GIT_WORKFLOW.md`: Guide for using Git with this project
 
 ### Customization
 
 You can customize the appearance of the warning banner by modifying `content.css`.
-
-### Packaging
-
-To package the extension for distribution:
-
-1. Make sure you've created the icon PNG files in the `images` directory
-2. Run the `package.bat` script
-3. The packaged extension will be created in the `dist` directory as `trusttag.zip`
 
 ## License
 

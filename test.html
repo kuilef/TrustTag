@@ -77,9 +77,7 @@
     <h2>Test URLs</h2>
     <p>Click the buttons below to modify the URL hash. This simulates navigating to different pages without actually leaving this test page.</p>
     
-    <button onclick="updateHash('example.com')">example.com</button>
-    <button onclick="updateHash('wikipedia.org/Israel')">wikipedia.org/Israel</button>
-    <button onclick="updateHash('fakenews.com')">fakenews.com</button>
+    <button onclick="updateHash('bbc.com')">bbc.com</button>
     <button onclick="updateHash('normal-site.com')">normal-site.com</button>
     
     <p>The extension should display a warning banner for the first three URLs but not for the last one.</p>
@@ -88,9 +86,7 @@
   <div class="test-section">
     <h2>Expected Behavior</h2>
     <ul>
-      <li><strong>example.com</strong> - Should show warning: "false information"</li>
-      <li><strong>wikipedia.org/Israel</strong> - Should show warning: "biased content"</li>
-      <li><strong>fakenews.com</strong> - Should show warning: "known fake news site"</li>
+      <li><strong>bbc.com</strong> - Should show warning: "bias, misrepresenation"</li>
       <li><strong>normal-site.com</strong> - Should not show any warning</li>
     </ul>
   </div>
