@@ -12,16 +12,6 @@ TrustTag is a Chrome extension that displays warnings on websites with questiona
 - Efficient caching using ETag for reduced bandwidth usage
 - Simple and clean user interface
 
-## Installation
-
-Since this extension is not published to the Chrome Web Store, you'll need to install it in developer mode:
-
-1. Download or clone this repository to your computer
-2. Open Chrome and go to `chrome://extensions/`
-3. Enable "Developer mode" using the toggle in the top-right corner
-4. Click "Load unpacked" and select the directory containing the extension files
-5. The TrustTag extension should now appear in your extensions list
-
 ## Configuration
 
 1. Click on the TrustTag icon in your Chrome toolbar to open the settings popup
