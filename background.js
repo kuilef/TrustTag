@@ -25,33 +25,65 @@ chrome.runtime.onInstalled.addListener((details) => {
   chrome.alarms.create('syncData', { periodInMinutes: syncInterval });
 });
 
+// Also initialize when browser starts
+chrome.runtime.onStartup.addListener(() => {
+  console.log('Browser started, initializing extension');
+  
+  // Load configuration from storage
+  loadConfigAndSync();
+  
+  // Set up periodic sync
+  chrome.alarms.create('syncData', { periodInMinutes: syncInterval });
+});
+
 // Function to load config and sync data
 function loadConfigAndSync() {
-  chrome.storage.local.get(['isFirstRun'], (result) => {
-    const isFirstRun = result.isFirstRun;
+  // First, load sync status from local storage
+  chrome.storage.local.get(['syncStatus'], (result) => {
+    if (result.syncStatus) {
+      console.log('Loaded sync status from storage:', result.syncStatus);
+      syncStatus = result.syncStatus;
+    }
     
-    chrome.storage.sync.get(['syncInterval', 'dataSources'], (result) => {
-      console.log('Loaded configuration:', result);
+    // Then load other configuration
+    chrome.storage.local.get(['isFirstRun', 'trustTagData'], (result) => {
+      const isFirstRun = result.isFirstRun;
+      const existingData = result.trustTagData;
       
-      if (result.syncInterval) syncInterval = result.syncInterval;
-      
-      if (result.dataSources && Array.isArray(result.dataSources) && result.dataSources.length > 0) {
-        dataSources = result.dataSources;
-        console.log('Loaded data sources:', dataSources);
-      } else {
-        // If no data sources are found, use the default
-        dataSources = [DEFAULT_SOURCE];
-        // Save the default data source
-        chrome.storage.sync.set({ dataSources });
+      // Update data count in sync status if we have data but no count
+      if (existingData && existingData.length > 0 && syncStatus.dataCount === 0) {
+        syncStatus.dataCount = existingData.length;
+        if (syncStatus.status === 'unknown') {
+          syncStatus.status = 'success';
+          syncStatus.message = 'Data loaded from storage';
+        }
+        // Save updated sync status
+        chrome.storage.local.set({ syncStatus });
       }
       
-      // Perform initial sync if this is first run
-      if (isFirstRun) {
-        console.log('First run detected, performing initial sync');
-        syncData();
-        // Clear first run flag
-        chrome.storage.local.remove('isFirstRun');
-      }
+      chrome.storage.sync.get(['syncInterval', 'dataSources'], (result) => {
+        console.log('Loaded configuration:', result);
+        
+        if (result.syncInterval) syncInterval = result.syncInterval;
+        
+        if (result.dataSources && Array.isArray(result.dataSources) && result.dataSources.length > 0) {
+          dataSources = result.dataSources;
+          console.log('Loaded data sources:', dataSources);
+        } else {
+          // If no data sources are found, use the default
+          dataSources = [DEFAULT_SOURCE];
+          // Save the default data source
+          chrome.storage.sync.set({ dataSources });
+        }
+        
+        // Perform initial sync if this is first run
+        if (isFirstRun) {
+          console.log('First run detected, performing initial sync');
+          syncData();
+          // Clear first run flag
+          chrome.storage.local.remove('isFirstRun');
+        }
+      });
     });
   });
 }

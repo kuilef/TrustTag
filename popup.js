@@ -58,19 +58,41 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Function to load sync status
   function loadSyncStatus() {
-    chrome.runtime.sendMessage({ action: 'getSyncStatus' }, (response) => {
-      console.log('Sync status from background:', response);
-      if (response && response.syncStatus) {
-        updateSyncStatusUI(response.syncStatus);
-      }
-    });
-    
-    // Also check local storage for sync status
-    chrome.storage.local.get(['syncStatus'], (result) => {
+    // First check local storage for sync status
+    chrome.storage.local.get(['syncStatus', 'trustTagData'], (result) => {
       console.log('Sync status from storage:', result);
+      
+      // If we have sync status in storage, use it
       if (result.syncStatus) {
         updateSyncStatusUI(result.syncStatus);
+        
+        // If we have data but sync status doesn't show it, update the data count
+        if (result.trustTagData && result.trustTagData.length > 0 && 
+            (!result.syncStatus.dataCount || result.syncStatus.dataCount === 0)) {
+          const updatedStatus = {...result.syncStatus};
+          updatedStatus.dataCount = result.trustTagData.length;
+          if (updatedStatus.status === 'unknown') {
+            updatedStatus.status = 'success';
+            updatedStatus.message = 'Data loaded from storage';
+          }
+          updateSyncStatusUI(updatedStatus);
+        }
       }
+      
+      // Then also check with background script for possibly more up-to-date status
+      chrome.runtime.sendMessage({ action: 'getSyncStatus' }, (response) => {
+        console.log('Sync status from background:', response);
+        if (response && response.syncStatus) {
+          // Only update if the background has a more recent sync time
+          const bgSyncTime = response.syncStatus.lastSync ? new Date(response.syncStatus.lastSync) : null;
+          const storageSyncTime = result.syncStatus && result.syncStatus.lastSync ? 
+                                  new Date(result.syncStatus.lastSync) : null;
+          
+          if (!storageSyncTime || !bgSyncTime || bgSyncTime >= storageSyncTime) {
+            updateSyncStatusUI(response.syncStatus);
+          }
+        }
+      });
     });
   }
   
