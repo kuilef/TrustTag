@@ -11,7 +11,8 @@
   },
   "permissions": [
     "storage",
-    "alarms"
+    "alarms",
+    "activeTab"
   ],
   "host_permissions": [
     "<all_urls>"
